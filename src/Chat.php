@@ -10,17 +10,42 @@ class Chat
 
     public function start()
     {
-        echo 'Ask anything to AI'. PHP_EOL;
 
-        while (true) {
-            $input = readline('> ');
+        $this->welcome();
 
-            if ($input === 'exit' || $input === '') {
+        while ($input = $this->prompt()) {
+                        if ($this->exit($input)) {
                 break;
             }
 
             $response = $this->aiService->getResponse($input);
-            echo $response . PHP_EOL;
+
+            $this->output($response);
         }
+    }
+
+    private function welcome()
+    {
+        echo 'Welcome to the AI Chat! Type "exit" to quit.' . PHP_EOL;
+    }
+
+    private function prompt(): string
+    {
+        return trim(readline('> '));
+    }
+
+    private function exit(string $input): bool
+    {
+        return trim($input) === 'exit';
+    }
+
+    private function output($response)
+    {
+        echo $response . PHP_EOL;
+    }
+
+    public function getResponse($input)
+    {
+        return $this->aiService->getResponse($input);
     }
 }
